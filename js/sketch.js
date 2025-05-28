@@ -4,12 +4,16 @@
 // 🤟(ILoveYou)
 function getCode(left_gesture, right_gesture) {
   let code_array = {
-    "Thumb_Up": 1,
-    "Thumb_Down": 2,
-    "Victory": 3,
-    "Pointing_Up": 4,
-    "Closed_Fist": 5,
-    "Open_Palm": 6,
+    "Three_fin": 1,
+    "Two_fin": 2,
+    "gu": 3,
+    "C": 4,
+    "One_fin": 5,
+    "pa": 6,
+    "Yoko_two":7,
+    "Yoko":8,
+    
+
   }
   let left_code = code_array[left_gesture];
   let right_code = code_array[right_gesture];
@@ -83,7 +87,7 @@ function setup() {
 
       let now = millis();
       if (c === lastChar) {
-        if (now - lastCharTime > 1000) {
+        if (now - lastCharTime > 1000) { //秒数かえてもよき
           // 1秒以上cが同じ値である場合の処理
           typeChar(c);
           lastCharTime = now;
