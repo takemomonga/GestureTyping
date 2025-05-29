@@ -10,17 +10,23 @@ function getCode(left_gesture, right_gesture) {
     "C": 4,
     "One_fin": 5,
     "pa": 6,
-    "Yoko_two":7,
+    /*"Yoko_two":7,
     "Yoko":8,
-    
-
+    "eru":9,
+   "yu":10,
+    "sita_fin":11,
+    "naname":12,
+    "o":13,
+    "yoko_oyafin":14,*/
   }
+  
   let left_code = code_array[left_gesture];
   let right_code = code_array[right_gesture];
   // left_codeとright_codeを文字として結合
   let code = String(left_code) + String(right_code);
   return code;
 }
+
 
 function getCharacter(code) {
   const codeToChar = {
@@ -29,10 +35,42 @@ function getCharacter(code) {
     "31": "m", "32": "n", "33": "o", "34": "p", "35": "q", "36": "r",
     "41": "s", "42": "t", "43": "u", "44": "v", "45": "w", "46": "x",
     "51": "y", "52": "z", "53": " ", "54": "backspace"
+    /*"54": "d", "48": "g", "99": "h",
+    "108": "j", "57": "k", "1111": "m", "512": "n", "53": "p", "1312": "q",
+    "44": "s", "58": "t", "25": "y", "812": "z", "1414": "backspace"*/
   };
   return codeToChar[code] || "";
 }
 
+/*function getSingleHandCode(gesture) {
+  let code_array = {
+    "Three_fin": 1,
+    "Two_fin": 2,
+    "gu": 3,
+    "C": 4,
+    "One_fin": 5,
+    "pa": 6,
+    "Yoko_two": 7,
+    "Yoko": 8,
+    "eru": 9,
+    "yu": 10,
+    "sita_fin": 11,
+    "naname": 12,
+    "o": 13,
+    "yoko_oyafin": 14,
+  };
+
+  return code_array[gesture];
+}*/
+
+/*function getSingleHandCharacter(code) {
+  const codeToChar = {
+    "11": "a", "3": "b", "4": "c","6": "e",
+    "7": "f", "5": "i", "9": "l", "13": "o", "14": "r",
+    "10": "u", "2": "v", "1": "w", "12": "x"
+  };
+  return codeToChar[String(code)] || "";
+}*/
 // 入力サンプル文章 
 let sample_texts = [
   "the quick brown fox jumps over the lazy dog",
@@ -64,6 +102,8 @@ function setup() {
 
   gotGestures = function (results) {
     gestures_results = results;
+
+
 
     if (results.gestures.length == 2) {
       if (game_mode.now == "ready" && game_mode.previous == "notready") {
