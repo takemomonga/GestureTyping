@@ -1,87 +1,53 @@
 // ジェスチャーの種類
-// 👍(Thumb_Up), 👎(Thumb_Down), ✌️(Victory), 
-// ☝️(Pointng_Up), ✊(Closed_Fist), 👋(Open_Palm), 
-// 🤟(ILoveYou)
+// 👍(Thumb_Up), 👎(Thumb_Down), ✌️(Victory), ☝️(Pointng_Up), ✊(Closed_Fist), 👋(Open_Palm), 🤟(ILoveYou)
 function getCode(left_gesture, right_gesture) {
   let code_array = {
-    "Three_fin": 1,
-    "Two_fin": 2,
-    "gu": 3,
-    "C": 4,
-    "One_fin": 5,
-    "pa": 6,
-    /*"Yoko_two":7,
-    "Yoko":8,
-    "eru":9,
-   "yu":10,
-    "sita_fin":11,
-    "naname":12,
-    "o":13,
-    "yoko_oyafin":14,*/
-  }
-  
+    "A": 1, "2": 2, "3": 3, "4": 4, "5": 5,
+    "6": 6, "7": 7, "8": 8, "9": 9, "10": 10,
+    "11": 11, "12": 12,
+  };
+
   let left_code = code_array[left_gesture];
   let right_code = code_array[right_gesture];
-  // left_codeとright_codeを文字として結合
-  let code = String(left_code) + String(right_code);
+  let code = String(left_code) + String(right_code); // 両手のコードを結合
   return code;
 }
 
-
 function getCharacter(code) {
   const codeToChar = {
-    "11": "a", "12": "b", "13": "c", "14": "d", "15": "e", "16": "f",
-    "21": "g", "22": "h", "23": "i", "24": "j", "25": "k", "26": "l",
-    "31": "m", "32": "n", "33": "o", "34": "p", "35": "q", "36": "r",
-    "41": "s", "42": "t", "43": "u", "44": "v", "45": "w", "46": "x",
-    "51": "y", "52": "z", "53": " ", "54": "backspace"
-    /*"54": "d", "48": "g", "99": "h",
-    "108": "j", "57": "k", "1111": "m", "512": "n", "53": "p", "1312": "q",
-    "44": "s", "58": "t", "25": "y", "812": "z", "1414": "backspace"*/
+    "11":"a","27" : "b","82" : "c","28": "d", "47": "e","45":"f","810": "g", "44": "h", "42" :"i",
+    "1210": "j", "17": "k","12": "l","55": "m", "411": "n","912": "o", "43": "p", "32": "q", "25":"r",
+    "22": "s","410": "t","122":"u","52":"v","66":"w","1111":"x", "54": "y", "110": "z", "77": "backspace", "33": " "
   };
   return codeToChar[code] || "";
 }
 
+// 片手のジェスチャーコードを取得する関数
 /*function getSingleHandCode(gesture) {
   let code_array = {
-    "Three_fin": 1,
-    "Two_fin": 2,
-    "gu": 3,
-    "C": 4,
-    "One_fin": 5,
-    "pa": 6,
-    "Yoko_two": 7,
-    "Yoko": 8,
-    "eru": 9,
-    "yu": 10,
-    "sita_fin": 11,
-    "naname": 12,
-    "o": 13,
-    "yoko_oyafin": 14,
+    "1": 1, "2": 2, "3": 3, "4": 4, "5": 5,
+    "6": 6, "7": 7, "8": 8, "9": 9, "10": 10,
+    "11": 11, "12": 12, "13": 13, "14": 14,
   };
-
   return code_array[gesture];
-}*/
+}
 
-/*function getSingleHandCharacter(code) {
+// 片手のジェスチャーコードからアルファベットを取得する関数
+function getSingleHandCharacter(code) {
   const codeToChar = {
-    "11": "a", "3": "b", "4": "c","6": "e",
-    "7": "f", "5": "i", "9": "l", "13": "o", "14": "r",
-    "10": "u", "2": "v", "1": "w", "12": "x"
+    "11": "a", "3": "b", "4": "c", "6": "e", "7": "f",
+    "5": "i", "9": "l", "13": "o", "14": "r", "10": "u",
+    "2": "v", "1": "w", "12": ""
   };
   return codeToChar[String(code)] || "";
 }*/
-// 入力サンプル文章 
+
+// 入力サンプル文章
 let sample_texts = [
   "the quick brown fox jumps over the lazy dog",
 ];
 
 // ゲームの状態を管理する変数
-// notready: ゲーム開始前 （カメラ起動前）
-// ready: ゲーム開始前（カメラ起動後）
-// playing: ゲーム中
-// finished: ゲーム終了後
-// ready, playing, finished
 let game_mode = {
   now: "notready",
   previous: "notready",
@@ -96,50 +62,59 @@ function setup() {
   p5canvas = createCanvas(320, 240);
   p5canvas.parent('#canvas');
 
-  // When gestures are found, the following function is called. The detection results are stored in results.
   let lastChar = "";
   let lastCharTime = millis();
 
   gotGestures = function (results) {
     gestures_results = results;
 
-
-
-    if (results.gestures.length == 2) {
+    if (results.gestures.length >= 1) {
       if (game_mode.now == "ready" && game_mode.previous == "notready") {
-        // ゲーム開始前の状態から、カメラが起動した後の状態に変化した場合
         game_mode.previous = game_mode.now;
         game_mode.now = "playing";
         document.querySelector('input').value = ""; // 入力欄をクリア
         game_start_time = millis(); // ゲーム開始時間を記録
       }
-      let left_gesture;
-      let right_gesture;
-      if (results.handedness[0][0].categoryName == "Left") {
-        left_gesture = results.gestures[0][0].categoryName;
-        right_gesture = results.gestures[1][0].categoryName;
-      } else {
-        left_gesture = results.gestures[1][0].categoryName;
-        right_gesture = results.gestures[0][0].categoryName;
-      }
-      let code = getCode(left_gesture, right_gesture);
-      let c = getCharacter(code);
 
+      let c = "";
       let now = millis();
-      if (c === lastChar) {
-        if (now - lastCharTime > 1000) { //秒数かえてもよき
-          // 1秒以上cが同じ値である場合の処理
+
+      if (results.gestures.length == 2) {
+        // 両手のジェスチャーを処理
+        let left_gesture, right_gesture;
+        if (results.handedness[0][0].categoryName == "Left") {
+          left_gesture = results.gestures[0][0].categoryName;
+          right_gesture = results.gestures[1][0].categoryName;
+        } else {
+          left_gesture = results.gestures[1][0].categoryName;
+          right_gesture = results.gestures[0][0].categoryName;
+        }
+        let code = getCode(left_gesture, right_gesture);
+        c = getCharacter(code);
+      /*} else if (results.gestures.length == 1) {
+        // 片手のジェスチャーを処理
+        let single_gesture = results.gestures[0][0].categoryName;
+        let single_code = getSingleHandCode(single_gesture);
+        c = getSingleHandCharacter(single_code);*/
+      }
+      if (c === "backspace") {
+        if (now - lastCharTime > 800) {
+        // backspaceは連続して表示可能
           typeChar(c);
+          lastChar = c;
           lastCharTime = now;
         }
-      } else {
-        lastChar = c;
-        lastCharTime = now;
+      } else if (c !== "" && c !== lastChar) { // 前回の文字と異なる場合のみ処理
+        if (now - lastCharTime > 900) { // 秒数かえてもよき
+          typeChar(c);
+          lastChar = c;
+          lastCharTime = now;
+        }
       }
     }
-
-  }
+  };
 }
+
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
