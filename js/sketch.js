@@ -17,7 +17,7 @@ function getCharacter(code) {
   const codeToChar = {
     "11":"a","27" : "b","82" : "c","28": "d", "47": "e","45":"f","810": "g", "44": "h", "42" :"i",
     "1210": "j", "17": "k","12": "l","55": "m", "411": "n","912": "o", "43": "p", "32": "q", "25":"r",
-    "22": "s","410": "t","122":"u","52":"v","66":"w","1111":"x", "54": "y", "110": "z", "77": "backspace", "33": " "
+    "88": "s","410": "t","122":"u","52":"v","66":"w","1111":"x", "54": "y", "110": "z", "77": "backspace", "33": " "
   };
   return codeToChar[code] || "";
 }
@@ -44,6 +44,7 @@ function getSingleHandCharacter(code) {
 
 // 入力サンプル文章
 let sample_texts = [
+  /*"the sun rises again after every dark night"*/
   "the quick brown fox jumps over the lazy dog",
 ];
 
@@ -68,7 +69,7 @@ function setup() {
   gotGestures = function (results) {
     gestures_results = results;
 
-    if (results.gestures.length >= 1) {
+    if (results.gestures.length == 2) {
       if (game_mode.now == "ready" && game_mode.previous == "notready") {
         game_mode.previous = game_mode.now;
         game_mode.now = "playing";
@@ -98,14 +99,14 @@ function setup() {
         c = getSingleHandCharacter(single_code);*/
       }
       if (c === "backspace") {
-        if (now - lastCharTime > 800) {
+        if (now - lastCharTime > 500) {
         // backspaceは連続して表示可能
           typeChar(c);
           lastChar = c;
           lastCharTime = now;
         }
       } else if (c !== "" && c !== lastChar) { // 前回の文字と異なる場合のみ処理
-        if (now - lastCharTime > 900) { // 秒数かえてもよき
+        if (now - lastCharTime > 450) { // 秒数かえてもよき
           typeChar(c);
           lastChar = c;
           lastCharTime = now;
@@ -120,6 +121,27 @@ function setup() {
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // ここから下は課題制作にあたって編集してはいけません。
+/*if (c === "backspace") {
+  if (now - lastCharTime > 450) {
+  // backspaceは連続して表示可能
+    typeChar(c);
+    lastChar = c;
+    lastCharTime = now;
+  }
+} else if (c === " ") { // 空文字の場合の処理
+  if (lastChar !== " " && now - lastCharTime > 450) {
+    // 空文字が連続しないようにする
+    typeChar(c);
+    lastChar = c;
+    lastCharTime = now;
+  }
+} else if (c !== "" ) { // 前回の文字と異なる場合のみ処理
+  if (now - lastCharTime > 450) { // 秒数かえてもよき
+    typeChar(c);
+    lastChar = c;
+    lastCharTime = now;
+  }
+}*/
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
